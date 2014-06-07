@@ -14,7 +14,7 @@
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/pending/cstddef.hpp>
+#include <cstddef>
 #include <boost/detail/iterator.hpp>
 #include <boost/concept_check.hpp>
 #include <boost/concept_archetype.hpp>
