@@ -1,5 +1,5 @@
 PropertyMap, part of collection of the [Boost C++ Libraries](http://github.com/boostorg), 
-define a general purpose interface for mapping key objects to corresponding value objects, thereby hiding the details of how the mapping is implemented from algorithms.
+defines a general purpose interface for mapping key objects to corresponding value objects, thereby hiding the details of how the mapping is implemented from algorithms.
 
 ### License
 
