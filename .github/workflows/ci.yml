@@ -123,6 +123,9 @@ jobs:
             if [[ "${{ matrix.ccache }}" == "no" ]]; then
                 echo "B2_USE_CCACHE=0" >> $GITHUB_ENV
             fi
+            if [[ "${{ matrix.sanitize }}" == "yes" ]]; then
+                echo "LSAN_OPTIONS=suppressions=${GITHUB_WORKSPACE}/test/suppressions.txt" >> $GITHUB_ENV
+            fi
             if [[ "${{ matrix.valgrind }}" == "yes" ]]; then
                 echo "B2_DEFINES=BOOST_NO_STRESS_TEST=1" >> $GITHUB_ENV
                 echo "B2_TESTFLAGS=testing.launcher=valgrind" >> $GITHUB_ENV
