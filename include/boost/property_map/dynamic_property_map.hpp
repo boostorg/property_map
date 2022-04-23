@@ -26,6 +26,7 @@
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/type.hpp>
+#include <boost/type_index.hpp>
 #include <boost/smart_ptr.hpp>
 #include <exception>
 #include <map>
@@ -149,7 +150,7 @@ class dynamic_property_map_adaptor : public dynamic_property_map
     using boost::put;
 
     key_type key_ = any_cast<key_type>(in_key);
-    if (in_value.type() == typeid(value_type)) {
+    if (in_value.type() == boost::typeindex::type_id<value_type>()) {
       put(property_map_, key_, any_cast<value_type>(in_value));
     } else {
       //  if in_value is an empty string, put a default constructed value_type.
