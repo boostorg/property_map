@@ -102,7 +102,7 @@ struct dynamic_get_failure : public dynamic_property_exception {
     if(statement.empty())
       statement =
         std::string(
-         "dynamic property get cannot retrieve value for  property: ")
+         "dynamic property get cannot retrieve value for property: ")
         + property + ".";
 
     return statement.c_str();
