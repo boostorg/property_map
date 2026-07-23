@@ -19,30 +19,34 @@
 #include <boost/concept/assert.hpp>
 #include <boost/concept_check.hpp>
 #include <boost/concept_archetype.hpp>
-#include <boost/mpl/assert.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/or.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/has_xxx.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/make_void.hpp>
+#include <type_traits>
 
 namespace boost {
 
   //=========================================================================
   // property_traits class
 
-  BOOST_MPL_HAS_XXX_TRAIT_DEF(key_type)
-  BOOST_MPL_HAS_XXX_TRAIT_DEF(value_type)
-  BOOST_MPL_HAS_XXX_TRAIT_DEF(reference)
-  BOOST_MPL_HAS_XXX_TRAIT_DEF(category)
- 
+  template <class T, class = void> struct has_key_type : std::false_type {};
+  template <class T> struct has_key_type<T, boost::void_t<typename T::key_type> > : std::true_type {};
+
+  template <class T, class = void> struct has_value_type : std::false_type {};
+  template <class T> struct has_value_type<T, boost::void_t<typename T::value_type> > : std::true_type {};
+
+  template <class T, class = void> struct has_reference : std::false_type {};
+  template <class T> struct has_reference<T, boost::void_t<typename T::reference> > : std::true_type {};
+
+  template <class T, class = void> struct has_category : std::false_type {};
+  template <class T> struct has_category<T, boost::void_t<typename T::category> > : std::true_type {};
+
   template<class PA>
   struct is_property_map :
-    boost::mpl::and_<
-      has_key_type<PA>,
-      has_value_type<PA>,
-      has_reference<PA>,
-      has_category<PA>
+    std::integral_constant<bool,
+      has_key_type<PA>::value &&
+      has_value_type<PA>::value &&
+      has_reference<PA>::value &&
+      has_category<PA>::value
     >
   {};
  
@@ -58,7 +62,7 @@ namespace boost {
  
   template <typename PA>
   struct property_traits :
-    boost::mpl::if_<is_property_map<PA>,
+    std::conditional<is_property_map<PA>::value,
       default_property_traits<PA>,
       null_property_traits>::type
   {};
@@ -232,9 +236,9 @@ namespace boost {
       BOOST_CONCEPT_ASSERT((ConvertibleConcept<Category, LvalueTag>));
 
       typedef typename property_traits<PMap>::value_type value_type;
-      BOOST_MPL_ASSERT((boost::mpl::or_<
-                          boost::is_same<const value_type&, reference>,
-                          boost::is_same<value_type&, reference> >));
+      static_assert(boost::is_same<const value_type&, reference>::value ||
+                    boost::is_same<value_type&, reference>::value,
+                    "lvalue property map reference must be value_type& or const value_type&");
 
       reference ref = pmap[k];
       ignore_unused_variable_warning(ref);
@@ -266,7 +270,8 @@ namespace boost {
       BOOST_CONCEPT_ASSERT((ConvertibleConcept<Category, LvalueTag>));
 
       typedef typename property_traits<PMap>::value_type value_type;
-      BOOST_MPL_ASSERT((boost::is_same<value_type&, reference>));
+      static_assert(boost::is_same<value_type&, reference>::value,
+                    "mutable lvalue property map reference must be value_type&");
 
       reference ref = pmap[k];
       ignore_unused_variable_warning(ref);
