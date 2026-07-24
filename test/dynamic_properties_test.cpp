@@ -27,27 +27,22 @@
 #include <memory>
 
 // generate a dynamic_property_map that maps strings to strings
-// WARNING: This code leaks memory.  For testing purposes only!
 // WARNING: This code uses library internals. For testing purposes only!
 boost::shared_ptr<boost::dynamic_property_map>
 string2string_gen(const std::string&,
                   const boost::any&,
                   const boost::any&) {
-  typedef std::map<std::string,std::string> map_t;
-  typedef
-    boost::associative_property_map< std::map<std::string, std::string> >
-    property_t;
+  using map_t = std::map<std::string, std::string>;
+  using property_t = boost::associative_property_map<map_t>;
+  using adaptor_t = boost::detail::dynamic_property_map_adaptor<property_t>;
 
+  // property_t only views mymap, so the returned shared_ptr's deleter holds
+  // mymap to keep it alive as long as the adaptor.
+  std::shared_ptr<map_t> mymap = std::make_shared<map_t>();
+  adaptor_t* adaptor = new adaptor_t(property_t(*mymap));
 
-  map_t* mymap = new map_t(); // hint: leaky memory here!
-
-  property_t property_map(*mymap);
-
-  boost::shared_ptr<boost::dynamic_property_map> pm(
-    new
-    boost::detail::dynamic_property_map_adaptor<property_t>(property_map));
-
-  return pm;
+  return boost::shared_ptr<boost::dynamic_property_map>(
+    adaptor, [mymap](boost::dynamic_property_map* p) { delete p; });
 }
 
 
