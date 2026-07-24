@@ -9,7 +9,7 @@ project(cmake_subdir_test LANGUAGES CXX)
 # Those 2 should work the same
 # while using find_package for the installed Boost avoids the need to manually specify dependencies
 if(BOOST_CI_INSTALL_TEST)
-    find_package(boost_property_map REQUIRED)
+    find_package(Boost REQUIRED COMPONENTS property_map)
 else()
     set(BOOST_INCLUDE_LIBRARIES property_map)
     add_subdirectory(../../../.. deps/boost EXCLUDE_FROM_ALL)
