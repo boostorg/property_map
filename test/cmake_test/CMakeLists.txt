@@ -9,7 +9,21 @@ project(cmake_subdir_test LANGUAGES CXX)
 # Those 2 should work the same
 # while using find_package for the installed Boost avoids the need to manually specify dependencies
 if(BOOST_CI_INSTALL_TEST)
-    find_package(boost_property_map REQUIRED)
+    # property_map is header-only. B2 does not install a per-library CMake config
+    # for header-only libraries, so consume the generic Boost::headers target and
+    # alias it to keep the target name consistent with the installed-by-CMake case.
+    if(BOOST_CI_INSTALLED_BY STREQUAL "B2")
+        find_package(Boost REQUIRED)
+        if(CMAKE_VERSION VERSION_LESS 3.18)
+            add_library(Boost_property_map INTERFACE)
+            target_link_libraries(Boost_property_map INTERFACE Boost::headers)
+            add_library(Boost::property_map ALIAS Boost_property_map)
+        else()
+            add_library(Boost::property_map ALIAS Boost::headers)
+        endif()
+    else()
+        find_package(boost_property_map REQUIRED)
+    endif()
 else()
     set(BOOST_INCLUDE_LIBRARIES property_map)
     add_subdirectory(../../../.. deps/boost EXCLUDE_FROM_ALL)
