@@ -12,6 +12,7 @@
 
 #include <boost/property_map/property_map.hpp>
 #include <boost/type_traits.hpp>
+#include <type_traits>
 
 namespace boost {
 
@@ -47,11 +48,11 @@ public:
     //     reference
     // else
     //     const value_type&
-    inline friend typename boost::mpl::if_<
-        boost::mpl::not_< boost::is_reference<reference> >,
+    inline friend typename std::conditional<
+        !boost::is_reference<reference>::value,
         value_type,
-        typename boost::mpl::if_<
-            boost::is_const<reference>,
+        typename std::conditional<
+            boost::is_const<reference>::value,
             reference,
             const value_type&
             >::type

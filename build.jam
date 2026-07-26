@@ -14,7 +14,6 @@ constant boost_dependencies :
     /boost/function//boost_function
     /boost/iterator//boost_iterator
     /boost/lexical_cast//boost_lexical_cast
-    /boost/mpl//boost_mpl
     /boost/smart_ptr//boost_smart_ptr
     /boost/throw_exception//boost_throw_exception
     /boost/type_index//boost_type_index
