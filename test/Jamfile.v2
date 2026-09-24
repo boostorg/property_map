@@ -25,4 +25,5 @@ test-suite property_map
     [ run     dynamic_properties_test.cpp : : : <define>BOOST_NO_RTTI=1 : dynamic_properties_no_rtti_test ]
     [ run     function_property_map_test.cpp ]
     [ run     transform_value_property_map_test.cpp ]
+    [ run     property_map_iterator_test.cpp ]
   ;

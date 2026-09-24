@@ -17,8 +17,7 @@
 #include <boost/property_map/property_map.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/utility/result_of.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/not.hpp>
+#include <type_traits>
 #include <utility>
 
 namespace boost {
@@ -30,11 +29,8 @@ class transform_value_property_map: public put_get_helper<Ret, transform_value_p
   typedef Ret reference;
   typedef typename boost::remove_cv<typename boost::remove_reference<Ret>::type>::type value_type;
 
-  typedef typename boost::mpl::if_<
-                     boost::mpl::and_<
-                       boost::is_reference<Ret>,
-                       boost::mpl::not_<boost::is_const<Ret> >
-                     >,
+  typedef typename std::conditional<
+                     boost::is_reference<Ret>::value && !boost::is_const<Ret>::value,
                      boost::lvalue_property_map_tag,
                      boost::readable_property_map_tag>::type
     category;
