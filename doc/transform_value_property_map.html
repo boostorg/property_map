@@ -68,7 +68,7 @@ This property map is an adaptor that composes a function object after an existin
 <TR>
 <TD><TT>Ref</TT></TD>
 <TD>The result type of the function.</TD>
-<TD><TT>boost::result_of&lt;const UnaryFunction(property_traits&lt;PM&gt;::reference)&gt;::type</TT></TD>
+<TD><TT>decltype(std::declval&lt;const UnaryFunction&gt;()(std::declval&lt;property_traits&lt;PM&gt;::reference&gt;()))</TT></TD>
 </TR>
 
 

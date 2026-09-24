@@ -3,6 +3,7 @@
 // Author: Philipp Moeller
 //
 // Copyright 2012, Philipp Moeller
+// Copyright 2026, Arnaud Becheler
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -16,13 +17,23 @@
 #include <boost/config.hpp>
 #include <boost/property_map/property_map.hpp>
 #include <boost/type_traits.hpp>
-#include <boost/utility/result_of.hpp>
 #include <type_traits>
 #include <utility>
 
 namespace boost {
 
-template<typename Func, typename PM, typename Ret = typename boost::result_of<const Func(typename property_traits<PM>::reference)>::type>
+namespace detail {
+
+// MSVC in permissive mode cannot evaluate a bare decltype default template argument
+template <typename Func, typename PM>
+struct transform_value_property_map_result
+{
+  using type = decltype(std::declval<const Func>()(std::declval<typename property_traits<PM>::reference>()));
+};
+
+} // namespace detail
+
+template<typename Func, typename PM, typename Ret = typename detail::transform_value_property_map_result<Func, PM>::type>
 class transform_value_property_map: public put_get_helper<Ret, transform_value_property_map<Func, PM, Ret> > {
   public:
   typedef typename property_traits<PM>::key_type key_type;

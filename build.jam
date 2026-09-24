@@ -17,8 +17,7 @@ constant boost_dependencies :
     /boost/smart_ptr//boost_smart_ptr
     /boost/throw_exception//boost_throw_exception
     /boost/type_index//boost_type_index
-    /boost/type_traits//boost_type_traits
-    /boost/utility//boost_utility ;
+    /boost/type_traits//boost_type_traits ;
 
 project /boost/property_map
     : common-requirements

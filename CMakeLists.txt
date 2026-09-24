@@ -25,7 +25,6 @@ target_link_libraries(boost_property_map
     Boost::smart_ptr
     Boost::throw_exception
     Boost::type_traits
-    Boost::utility
 )
 
 if(BUILD_TESTING AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt")
