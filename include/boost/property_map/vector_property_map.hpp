@@ -12,6 +12,7 @@
 
 #include <boost/property_map/property_map.hpp>
 #include <boost/smart_ptr/shared_ptr.hpp>
+#include <cstddef>
 #include <iterator>
 #include <vector>
 
@@ -34,7 +35,7 @@ namespace boost {
         : store(new std::vector<T>()), index(index)
         {}
 
-        vector_property_map(unsigned initial_size, 
+        vector_property_map(std::size_t initial_size,
                             const IndexMap& index = IndexMap())
         : store(new std::vector<T>(initial_size)), index(index)
         {}
