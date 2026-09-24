@@ -12,6 +12,7 @@
 #define BOOST_PROPERTY_MAP_VECTOR_PROPERTY_MAP_HPP
 
 #include <boost/property_map/property_map.hpp>
+#include <cstddef>
 #include <iterator>
 #include <memory>
 #include <vector>
@@ -35,7 +36,7 @@ namespace boost {
         : store(std::make_shared<std::vector<T> >()), index(index)
         {}
 
-        vector_property_map(unsigned initial_size, 
+        vector_property_map(std::size_t initial_size,
                             const IndexMap& index = IndexMap())
         : store(std::make_shared<std::vector<T> >(initial_size)), index(index)
         {}
