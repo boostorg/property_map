@@ -1,5 +1,6 @@
 
 // Copyright 2005 The Trustees of Indiana University.
+// Copyright 2026, Arnaud Becheler
 
 // Use, modification and distribution is subject to the Boost Software 
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -18,17 +19,15 @@
 #endif
 
 #include <boost/core/lightweight_test.hpp>
-#include <boost/smart_ptr.hpp>
 #include <boost/property_map/dynamic_property_map.hpp>
 #include <boost/property_map/property_map.hpp>
 #include <map>
-#include <iostream>
 #include <string>
 #include <memory>
 
 // generate a dynamic_property_map that maps strings to strings
 // WARNING: This code uses library internals. For testing purposes only!
-boost::shared_ptr<boost::dynamic_property_map>
+std::shared_ptr<boost::dynamic_property_map>
 string2string_gen(const std::string&,
                   const boost::any&,
                   const boost::any&) {
@@ -41,7 +40,7 @@ string2string_gen(const std::string&,
   std::shared_ptr<map_t> mymap = std::make_shared<map_t>();
   adaptor_t* adaptor = new adaptor_t(property_t(*mymap));
 
-  return boost::shared_ptr<boost::dynamic_property_map>(
+  return std::shared_ptr<boost::dynamic_property_map>(
     adaptor, [mymap](boost::dynamic_property_map* p) { delete p; });
 }
 
