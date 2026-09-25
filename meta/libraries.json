@@ -10,7 +10,7 @@
         "Generic"
     ],
     "maintainers": [
-        "Douglas Gregor <dgregor -at- cs.indiana.edu>"
+        "Arnaud Becheler <arnaud.becheler -at- gmail.com>"
     ],
     "cxxstd": "11"
 }
