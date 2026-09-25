@@ -25,7 +25,6 @@
 #include <boost/any.hpp>
 #include <boost/function/function3.hpp>
 #include <boost/type_traits/is_convertible.hpp>
-#include <boost/mpl/bool.hpp>
 #include <boost/type.hpp>
 #include <boost/type_index.hpp>
 #include <exception>
@@ -34,6 +33,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <type_traits>
 #include <typeinfo>
 
 namespace boost {
@@ -146,7 +146,7 @@ class dynamic_property_map_adaptor : public dynamic_property_map
 
   //   in_value must either hold an object of value_type or a string that
   //   can be converted to value_type via iostreams.
-  void do_put(const any& in_key, const any& in_value, mpl::bool_<true>)
+  void do_put(const any& in_key, const any& in_value, std::true_type)
   {
     using boost::put;
 
@@ -164,7 +164,7 @@ class dynamic_property_map_adaptor : public dynamic_property_map
     }
   }
 
-  void do_put(const any&, const any&, mpl::bool_<false>)
+  void do_put(const any&, const any&, std::false_type)
   {
     BOOST_THROW_EXCEPTION(dynamic_const_put_error());
   }
@@ -188,8 +188,9 @@ public:
   void put(const any& in_key, const any& in_value) BOOST_OVERRIDE
   {
     do_put(in_key, in_value,
-           mpl::bool_<(is_convertible<category*,
-                                      writable_property_map_tag*>::value)>());
+           std::integral_constant<bool,
+                                  is_convertible<category*,
+                                                 writable_property_map_tag*>::value>());
   }
 
   const std::type_info& key()   const BOOST_OVERRIDE { return typeid(key_type); }

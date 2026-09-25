@@ -10,8 +10,8 @@
 
 #include <boost/property_map/property_map.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>
-#include <boost/mpl/if.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <type_traits>
 
 namespace boost {
 
@@ -92,11 +92,13 @@ namespace boost {
   } // namespace detail
 
   template <class PropertyMap, class Iterator>
-  struct property_map_iterator_generator :
-    mpl::if_< is_same< typename property_traits<PropertyMap>::category, lvalue_property_map_tag>,
-              detail::lvalue_pmap_iter<Iterator, PropertyMap>,
-              detail::readable_pmap_iter<Iterator, PropertyMap> >
-  {};
+  struct property_map_iterator_generator
+  {
+    typedef typename std::conditional<
+      is_same< typename property_traits<PropertyMap>::category, lvalue_property_map_tag>::value,
+      detail::lvalue_pmap_iter<Iterator, PropertyMap>,
+      detail::readable_pmap_iter<Iterator, PropertyMap> >::type type;
+  };
 
   template <class PropertyMap, class Iterator>
   typename property_map_iterator_generator<PropertyMap, Iterator>::type
