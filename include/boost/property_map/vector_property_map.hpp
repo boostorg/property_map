@@ -1,4 +1,5 @@
 // Copyright (C) Vladimir Prus 2003.
+// Copyright 2026, Arnaud Becheler
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -11,9 +12,9 @@
 #define BOOST_PROPERTY_MAP_VECTOR_PROPERTY_MAP_HPP
 
 #include <boost/property_map/property_map.hpp>
-#include <boost/smart_ptr/shared_ptr.hpp>
 #include <cstddef>
 #include <iterator>
+#include <memory>
 #include <vector>
 
 namespace boost {
@@ -32,12 +33,12 @@ namespace boost {
         typedef boost::lvalue_property_map_tag category;
 
         vector_property_map(const IndexMap& index = IndexMap())
-        : store(new std::vector<T>()), index(index)
+        : store(std::make_shared<std::vector<T> >()), index(index)
         {}
 
         vector_property_map(std::size_t initial_size,
                             const IndexMap& index = IndexMap())
-        : store(new std::vector<T>(initial_size)), index(index)
+        : store(std::make_shared<std::vector<T> >(initial_size)), index(index)
         {}
 
         typename std::vector<T>::iterator storage_begin()
@@ -82,7 +83,7 @@ namespace boost {
         // store pointer to data, because if copy of property map resizes
         // the vector, the pointer to data will be invalidated. 
         // I wonder if class 'pmap_ref' is simply needed.
-        shared_ptr< std::vector<T> > store;
+        std::shared_ptr< std::vector<T> > store;
         IndexMap index;
     };
 
